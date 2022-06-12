@@ -52,22 +52,21 @@ func RelationAction(c *gin.Context) {
 				TargetId: int64(u_id),
 			}
 			user_follow := to_user_id + "/follow" //粉丝
-			user_action := user_id + "/action" //当前用户的关注数量
-	
+			user_action := user_id + "/action"    //当前用户的关注数量
+
 			model.Rdb.Incr(model.Ctx, user_follow) //当前用户的粉丝加1
 			value := model.Rdb.Get(model.Ctx, user_follow)
 			model.Rdb.Incr(model.Ctx, user_action)
 			value_action := model.Rdb.Get(model.Ctx, user_action)
-	
+
 			value_result, _ := value.Result()
 			r_value, _ := strconv.Atoi(value_result)
 			value_action_result, _ := value_action.Result()
 			r_action_value, _ := strconv.Atoi(value_action_result)
-			message:=mes.Message{
-				Followed:followed_sql,
-				FollowCount: r_action_value,
+			message := mes.Message{
+				Followed:      followed_sql,
+				FollowCount:   r_action_value,
 				FollowerCount: r_value,
-
 			}
 			user_list := to_user_id + "/follower/list"   //粉丝的列表
 			user_follow_list := user_id + "/follow/list" //当前用户的关注列表
@@ -97,7 +96,6 @@ func RelationAction(c *gin.Context) {
 		value_action_result, _ := value_action.Result()
 		r_action_value, _ := strconv.Atoi(value_action_result)
 
-
 		follow_sql := model.Follow_sql{}
 		u_id, _ := strconv.Atoi(user_id)
 		follow_sql.UserId = int64(u_id)
@@ -107,17 +105,15 @@ func RelationAction(c *gin.Context) {
 			UserId:   follow.ToUserId,
 			TargetId: int64(u_id),
 		}
-		message:=mes.Message{
-			Followed:followed_sql,
-			FollowCount: r_action_value,
+		message := mes.Message{
+			Followed:      followed_sql,
+			FollowCount:   r_action_value,
 			FollowerCount: r_value,
-
 		}
 		// user := model.User{}
 		// model.Db_write.Model(&user).Table("user").Where("id = ?", to_uid).Update("follower_count", r_value)
 		// us := model.User{}
 		// model.Db_write.Model(&us).Table("user").Where("id = ?", user_i).Update("follow_count", r_action_value)
-
 
 		user_list := to_user_id + "/follower/list"   //粉丝的列表
 		user_follow_list := user_id + "/follow/list" //当前用户的关注列表
@@ -139,7 +135,6 @@ func FollowList(c *gin.Context) {
 
 	uid, _ := c.Get("user_id")
 
-
 	user_i := config.GetInterfaceToString(uid)
 
 	user_id := c.Query("user_id")
@@ -147,27 +142,26 @@ func FollowList(c *gin.Context) {
 	uid_follow_list := user_i + "/follow/list"
 	user_follow_list := user_id + "/follow/list" //关注列表
 
-	result := model.Rdb.SMembers(model.Ctx,user_follow_list)
+	result := model.Rdb.SMembers(model.Ctx, user_follow_list)
 	res_list := result.Val()
 
 	result_list := []int{}
 
-	for i := 0 ; i < len(res_list) ; i ++ {
-		res,_ := strconv.Atoi(res_list[i])
-		result_list = append(result_list,res)
+	for i := 0; i < len(res_list); i++ {
+		res, _ := strconv.Atoi(res_list[i])
+		result_list = append(result_list, res)
 	}
-
 
 	var userList []model.User
 
-	for i := 0 ; i < len(result_list) ; i ++ {
+	for i := 0; i < len(result_list); i++ {
 		user := model.User{}
 		//model.Db_write.Table("user").Model(&user).Where("id = ?",result_list[i])
-		model.Db_write.Table("user").Where("id = ?",result_list[i]).Find(&user)
-		boolRes := model.Rdb.SIsMember(model.Ctx,uid_follow_list,result_list[i])
+		model.Db_write.Table("user").Where("id = ?", result_list[i]).Find(&user)
+		boolRes := model.Rdb.SIsMember(model.Ctx, uid_follow_list, result_list[i])
 		boolres := boolRes.Val()
 		user.IsFollow = boolres
-		userList = append(userList,user)
+		userList = append(userList, user)
 	}
 
 	c.JSON(http.StatusOK, UserListResponse{
@@ -188,28 +182,27 @@ func FollowerList(c *gin.Context) {
 	user_i := config.GetInterfaceToString(uid)
 	uid_follow_list := user_i + "/follow/list"
 
-	result := model.Rdb.SMembers(model.Ctx,user_id_follower_list)
+	result := model.Rdb.SMembers(model.Ctx, user_id_follower_list)
 	res_list := result.Val()
 
 	result_list := []int{}
 
-	for i := 0 ; i < len(res_list) ; i ++ {
-		res,_ := strconv.Atoi(res_list[i])
-		result_list = append(result_list,res)
+	for i := 0; i < len(res_list); i++ {
+		res, _ := strconv.Atoi(res_list[i])
+		result_list = append(result_list, res)
 	}
 
 	var userList []model.User
 
-	for i := 0 ; i < len(result_list) ; i ++ {
+	for i := 0; i < len(result_list); i++ {
 		user := model.User{}
 		//model.Db_write.Table("user").Model(&user).Where("id = ?",result_list[i])
-		model.Db_write.Table("user").Where("id = ?",result_list[i]).Find(&user)
-		boolRes := model.Rdb.SIsMember(model.Ctx,uid_follow_list,result_list[i])
+		model.Db_write.Table("user").Where("id = ?", result_list[i]).Find(&user)
+		boolRes := model.Rdb.SIsMember(model.Ctx, uid_follow_list, result_list[i])
 		boolres := boolRes.Val()
 		user.IsFollow = boolres
-		userList = append(userList,user)
+		userList = append(userList, user)
 	}
-
 
 	c.JSON(http.StatusOK, UserListResponse{
 		Response: Response{

@@ -54,18 +54,12 @@ func Feed(c *gin.Context) {
 		video[i].CoverUrl = video_sql[i].CoverUrl
 		video[i].Author = author
 		// 从redis 中判断
-		res2 := model.Rdb.SIsMember(model.Ctx, strconv.Itoa(author.Id), strconv.Itoa(int(video[i].Id)))
+		res2 := model.Rdb.SIsMember(model.Ctx, userid, strconv.Itoa(int(video[i].Id)))
 		isFa, _ := res2.Result()
 		if isFa {
 			video[i].IsFavorite = true
 		} else {
-			like := model.Like{}
-			model.Db_write.Table("like").Where("video_id = ? AND user_id = ?", video[i].Id, author.Id).First(&like)
-			if like.Id != 0 {
-				video[i].IsFavorite = true
-			} else {
-				video[i].IsFavorite = false
-			}
+			video[i].IsFavorite = false
 		}
 	}
 	c.JSON(http.StatusOK, FeedResponse{
@@ -73,5 +67,4 @@ func Feed(c *gin.Context) {
 		VideoList: video,
 		NextTime:  next_time,
 	})
-
 }

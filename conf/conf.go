@@ -1,11 +1,12 @@
 package conf
 
-
 import (
+	"os"
+
 	"github.com/spf13/cast"
 	viperlib "github.com/spf13/viper" // 自定义包名，避免与内置 viper 实例冲突
-	"os"
 )
+
 // viper 库实例
 var viper *viperlib.Viper
 
@@ -69,7 +70,7 @@ func Env(envName string, defaultValue ...interface{}) interface{} {
 
 func internalGet(path string, defaultValue ...interface{}) interface{} {
 	// config 或者环境变量不存在的情况
-	if !viper.IsSet(path)  {
+	if !viper.IsSet(path) {
 		if len(defaultValue) > 0 {
 			return defaultValue[0]
 		}
@@ -87,10 +88,7 @@ func Get(path string, defaultValue ...interface{}) string {
 	return GetString(path, defaultValue...)
 }
 
-
 // GetString 获取 String 类型的配置信息
 func GetString(path string, defaultValue ...interface{}) string {
 	return cast.ToString(internalGet(path, defaultValue...))
 }
-
-

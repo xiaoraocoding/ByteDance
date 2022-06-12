@@ -91,7 +91,6 @@ func Register(c *gin.Context) {
 	fmt.Println(user.Id)
 	fmt.Println(user.Id)
 
-
 	if user.Id != 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"status_code": 1,
@@ -100,7 +99,6 @@ func Register(c *gin.Context) {
 		user = model.User{}
 		user.Username = username
 		user.Password = password
-
 
 		model.Db_write.Table("user").Create(&user)
 		u := model.User{}
@@ -111,8 +109,8 @@ func Register(c *gin.Context) {
 		fmt.Println(user_action)
 		fmt.Println(user_action)
 
-		model.Rdb.Set(model.Ctx,user_follow,0,-1) //user-follower永久不过期
-		model.Rdb.Set(model.Ctx,user_action,0,-1)
+		model.Rdb.Set(model.Ctx, user_follow, 0, -1) //user-follower永久不过期
+		model.Rdb.Set(model.Ctx, user_action, 0, -1)
 
 		tokenString, _ := app.GenToken(u.Id)
 		c.JSON(http.StatusOK, UserLoginResponse{
@@ -164,7 +162,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "login failed"},
 		})
-	}else if password == user.Password {
+	} else if password == user.Password {
 		tokenString, _ := app.GenToken(user.Id)
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{

@@ -3,8 +3,9 @@ package model
 import (
 	"ByteDance/conf"
 	"fmt"
-	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"os"
+
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
 func HandleError(err error) {
@@ -17,6 +18,7 @@ var Base_url string
 
 var ObjectName string
 var Bucket *oss.Bucket
+
 func Init_Oss() {
 	Endpoint := conf.Get("endpoint")
 	AccessKeyId := conf.Get("accessKeyId")

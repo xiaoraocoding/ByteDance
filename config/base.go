@@ -1,8 +1,8 @@
 package config
 
 import (
-	"encoding/json"
 	"ByteDance/conf"
+	"encoding/json"
 	"strconv"
 )
 
@@ -10,26 +10,25 @@ func Init() {
 	conf.Add("app", func() map[string]interface{} {
 		return map[string]interface{}{
 			"port": conf.Env("PORT", "8888"),
-			"name": conf.Env("NAME","demo"),
+			"name": conf.Env("NAME", "demo"),
 		}
 	})
 	conf.Add("write_sql", func() map[string]interface{} {
 		return map[string]interface{}{
-			"port": conf.Env("WRITE_MYSQL_PORT","3306"),
-			"ip": conf.Env("WRITE_MYSQL_IP",""),
-			"password": conf.Env("WRITE_MYSQL_PASSWORD","123456"),
+			"port":     conf.Env("WRITE_MYSQL_PORT", "3306"),
+			"ip":       conf.Env("WRITE_MYSQL_IP", ""),
+			"password": conf.Env("WRITE_MYSQL_PASSWORD", "123456"),
 		}
 	})
 
 	conf.Add("read_sql", func() map[string]interface{} {
 		return map[string]interface{}{
-			"port": conf.Env("READ_MYSQL_PORT","3306"),
-			"ip": conf.Env("READ_MYSQL_IP",""),
-			"password": conf.Env("READ_MYSQL_PASSWORD","123456"),
+			"port":     conf.Env("READ_MYSQL_PORT", "3306"),
+			"ip":       conf.Env("READ_MYSQL_IP", ""),
+			"password": conf.Env("READ_MYSQL_PASSWORD", "123456"),
 		}
 	})
 }
-
 
 func GetInterfaceToString(value interface{}) string {
 	// interface 转 string
@@ -86,6 +85,3 @@ func GetInterfaceToString(value interface{}) string {
 
 	return key
 }
-
-
-
