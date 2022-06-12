@@ -69,15 +69,7 @@ func InitConsumer(topic string, channel string) {
 		panic(err)
 	}
 
-	//建立多个nsqd连接
-	// if err := c.ConnectToNSQDs([]string{"127.0.0.1:4150", "127.0.0.1:4152"}); err != nil {
-	//  panic(err)
-	// }
 
-	// 建立一个nsqd连接
-	// if err := c.ConnectToNSQD("127.0.0.1:4150"); err != nil {
-	//  panic(err)
-	// }
 }
 
 // 对应于topic为取消的Consumer
